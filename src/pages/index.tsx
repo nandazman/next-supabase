@@ -1,8 +1,3 @@
-import { supabase } from '@/utils/supabase'
-import { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import type { InferGetServerSidePropsType } from "next";
 import { api } from '@/utils/api';
 // import { api}
 
@@ -10,10 +5,18 @@ import { api } from '@/utils/api';
 export default function Home() {
   const { data, isLoading } = api.lessons.getAll.useQuery();
 
-  if (isLoading) return "Loading..."
+  if (isLoading) return "Loading...";
+
+  if (!data?.lessons) return null;
+  
   console.log({ data });
-  return <div>{
-    // lessons.
-  }</div>;
+  return <div>{data.lessons.map((item) => {
+    return (
+      <div key={item.id}>
+        <h1>{item.title}</h1>
+        <span>{item.description}</span>
+      </div>
+    );
+  })}</div>;
 }
 
